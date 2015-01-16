@@ -1,0 +1,525 @@
+/******************************************************************************
+* Copyright (c) 2005, 2014  Ericsson AB
+* All rights reserved. This program and the accompanying materials
+* are made available under the terms of the Eclipse Public License v1.0
+* which accompanies this distribution, and is available at
+* http://www.eclipse.org/legal/epl-v10.html
+*
+* Contributors:
+*   Zoltan Medve - initial implementation and initial documentation
+******************************************************************************/
+//
+//  File:               DHCPv6_Types.ttcn
+//  Description:        
+//  Rev:                R2A
+//  Prodnr:             CNL 113 763
+//  Reference:          RFC 3646 DNS Configuration options for Dynamic Host Configuration Protocol for IPv6 (DHCPv6)
+//                      RFC 1035 DOMAIN NAMES - IMPLEMENTATION AND SPECIFICATION
+//                      RFC 3319 Dynamic Host Configuration Protocol (DHCPv6) Options for Session Initiation Protocol (SIP) Servers
+//                      RFC 3315 Dynamic Host Configuration Protocol for IPv6 (DHCPv6)
+//                      RFC 3633 IPv6 Prefix Options for Dynamic Host Configuration Protocol (DHCP) version 6
+//
+//
+module DHCPv6_Types{
+  import from General_Types all;
+  
+  external function ef_enc_PDU_DHCPv6(in PDU_DHCPv6 pl_pdu) return octetstring 
+    with { extension "prototype(convert) encode(RAW)" }; 
+  external function ef_dec_PDU_DHCPv6(in octetstring pl_stream) return PDU_DHCPv6
+    with { extension "prototype(convert) decode(RAW)" };   
+  external function ef_dec_PDU_DHCPv6_backtrack(in octetstring pl_stream, out PDU_DHCPv6 pl_pdu) return integer
+    with { extension "prototype(backtrack) decode(RAW)" }; 
+  // CONSTANTS
+  // Message Types rfc 3315 24.2
+  const OCT1 cg_DHCPv6_SOLICIT_MESSAGE_TYPE              := '01'O;
+  const OCT1 cg_DHCPv6_ADVERTISE_MESSAGE_TYPE            := '02'O;
+  const OCT1 cg_DHCPv6_REQUEST_MESSAGE_TYPE              := '03'O;
+  const OCT1 cg_DHCPv6_CONFIRM_MESSAGE_TYPE              := '04'O;
+  const OCT1 cg_DHCPv6_RENEW_MESSAGE_TYPE                := '05'O;
+  const OCT1 cg_DHCPv6_REBIND_MESSAGE_TYPE               := '06'O;
+  const OCT1 cg_DHCPv6_REPLY_MESSAGE_TYPE                := '07'O;
+  const OCT1 cg_DHCPv6_RELEASE_MESSAGE_TYPE              := '08'O;
+  const OCT1 cg_DHCPv6_DECLINE_MESSAGE_TYPE              := '09'O;
+  const OCT1 cg_DHCPv6_RECONFIGURE_MESSAGE_TYPE          := '0A'O;
+  const OCT1 cg_DHCPv6_INFORMATION_REQUEST_MESSAGE_TYPE  := '0B'O;
+  const OCT1 cg_DHCPv6_RELAY_FORW_MESSAGE_TYPE           := '0C'O;
+  const OCT1 cg_DHCPv6_RELAY_REPL_MESSAGE_TYPE           := '0D'O;
+  
+  // Option Types rfc 3315 24.3
+  const LIN2_BO_LAST cg_DHCPv6_OPTION_CLIENTID                   := 1;
+  const LIN2_BO_LAST cg_DHCPv6_OPTION_SERVERID                   := 2;
+  const LIN2_BO_LAST cg_DHCPv6_OPTION_IA_NA                      := 3;
+  const LIN2_BO_LAST cg_DHCPv6_OPTION_IA_TA                      := 4;
+  const LIN2_BO_LAST cg_DHCPv6_OPTION_IAADDR                     := 5;
+  const LIN2_BO_LAST cg_DHCPv6_OPTION_ORO                        := 6;
+  const LIN2_BO_LAST cg_DHCPv6_OPTION_PREFERENCE                 := 7;
+  const LIN2_BO_LAST cg_DHCPv6_OPTION_ELAPSED_TIME               := 8;
+  const LIN2_BO_LAST cg_DHCPv6_OPTION_RELAY_MSG                  := 9;
+  // no 000A defined in rfc
+  const LIN2_BO_LAST cg_DHCPv6_OPTION_AUTH                       := 11;
+  const LIN2_BO_LAST cg_DHCPv6_OPTION_UNICAST                    := 12;
+  const LIN2_BO_LAST cg_DHCPv6_OPTION_STATUS_CODE                := 13;
+  const LIN2_BO_LAST cg_DHCPv6_RAPID_COMMIT                      := 14;
+  const LIN2_BO_LAST cg_DHCPv6_OPTION_USER_CLASS                 := 15;
+  const LIN2_BO_LAST cg_DHCPv6_OPTION_VENDOR_CLASS               := 16;
+  const LIN2_BO_LAST cg_DHCPv6_OPTION_VENDOR_OPTS                := 17;
+  const LIN2_BO_LAST cg_DHCPv6_OPTION_INTERFACE_ID               := 18;
+  const LIN2_BO_LAST cg_DHCPv6_OPTION_RECONF_MSG                 := 19;
+  const LIN2_BO_LAST cg_DHCPv6_OPTION_RECONF_ACCEPT              := 20;
+  // rfc 3319
+  const LIN2_BO_LAST cg_DHCPv6_OPTION_SIP_SERVER_D               := 21;
+  const LIN2_BO_LAST cg_DHCPv6_OPTION_SIP_SERVER_A               := 22;
+  // rfc 3646
+  const LIN2_BO_LAST cg_DHCPv6_OPTION_DNS_SERVERS                := 23;
+  const LIN2_BO_LAST cg_DHCPv6_OPTION_DOMAIN_LIST                := 24;
+  // rfc 3633
+  const LIN2_BO_LAST cg_DHCPv6_OPTION_IA_PD                      := 25;
+  const LIN2_BO_LAST cg_DHCPv6_OPTION_IAPREFIX                   := 26;
+  // Status Codes rfc 3315 24.4
+  const OCT2 cg_DHCPv6_Success                           := '0000'O;
+  const OCT2 cg_DHCPv6_UnspecFail                        := '0001'O;
+  const OCT2 cg_DHCPv6_NoAddrsAvail                      := '0002'O;
+  const OCT2 cg_DHCPv6_NoBinding                         := '0003'O;
+  const OCT2 cg_DHCPv6_NotOnLink                         := '0004'O;
+  const OCT2 cg_DHCPv6_UseMulticast                      := '0005'O;
+  
+  // DUID rfc 3315 24.5
+  const OCT2 cg_DHCPv6_DUID_LLT                          := '0001'O;
+  const OCT2 cg_DHCPv6_DUID_EN                           := '0002'O; 
+  const OCT2 cg_DHCPv6_DUID_LL                           := '0003'O;
+  
+  type octetstring IPv6_Address length(16) with {variant "FIELDLENGTH(16)"}
+ 
+  type union DHCPv6_Option {
+    SIP_Server_DHCPv6_Option                     sip_server_dhcpv6_option,
+    DNS_Configuration_Option                     dns_configuration_option,
+    Domain_Search_List_Option                    domain_search_list_option,
+    Client_Identifier_Option                     client_identifier_option,
+    Server_Identifier_Option                     server_identifier_option,
+    IA_NA_Option                                 ia_na_option,
+    IA_TA_Option                                 ia_ta_option,
+    IA_Address_Option                            ia_address_option,
+    Option_Request_Option                        option_request_option,
+    Preference_Option                            preference_option,
+    Elapsed_Time_Option                          elapsed_time_option,
+    Relay_Message_Option                         relay_message_option,
+    Authentication_Option                        authentication_option,
+    Server_Unicast_Option                        server_unicast_option,
+    Status_Code_Option                           status_code_option,
+    Rapid_Commit_Option                          rapid_commit_option,
+    User_Class_Option                            user_class_option,
+    Vendor_Class_Option                          vendor_class_option,
+    Vendor_Specific_Information_Option           vendor_specific_information_option,
+    Interface_Id_Option                          interface_id_option,
+    Reconfigure_Message_Option                   reconfigure_message_option,
+    Reconfigure_Accept_Option                    reconfigure_accept_option,
+    IA_PD_Option                                 ia_pd_option,
+    IA_PD_Prefix_Option                          ia_pd_prefix_option
+  }
+  
+  type set of DHCPv6_Option DHCPv6_Options;
+  
+  // rfc 3315 9.1
+  type union DUID {
+    DUID_LLT    duid_llt,
+    DUID_EN     duid_en,
+    DUID_LL     duid_ll
+  }
+  
+  // rfc 3315 9.2
+  type record DUID_LLT {
+    OCT2           duid_type (cg_DHCPv6_DUID_LLT),
+    OCT2           hardware_type,
+    LIN4_BO_LAST   time,
+    octetstring   link_layer_address
+  } with {
+    variant "PRESENCE (duid_type = cg_DHCPv6_DUID_LLT)"
+  }
+  
+  // rfc 3315 9.3
+  type record DUID_EN{
+    OCT2            duid_type (cg_DHCPv6_DUID_EN),
+    OCT4            enterprise_number,
+    octetstring   identifier
+  } with {
+    variant "PRESENCE (duid_type = cg_DHCPv6_DUID_EN)"
+  }
+  
+  // rfc 3315 9.4
+  type record DUID_LL{
+    OCT2            duid_type (cg_DHCPv6_DUID_LL),
+    OCT2            hardware_type,
+    octetstring   link_layer_address
+  } with {
+    variant "PRESENCE (duid_type = cg_DHCPv6_DUID_LL)"
+  }
+  
+  // rfc 3315 22.2
+  type record Client_Identifier_Option {
+    LIN2_BO_LAST       code (cg_DHCPv6_OPTION_CLIENTID),
+    LIN2_BO_LAST       len,
+    DUID               duid
+  } with {
+    variant "PRESENCE (code = cg_DHCPv6_OPTION_CLIENTID)"
+    variant (len) "LENGTHTO (duid)"
+  }
+  
+  // rfc 3315 22.3
+  type record Server_Identifier_Option {
+    LIN2_BO_LAST       code (cg_DHCPv6_OPTION_SERVERID),
+    LIN2_BO_LAST       len,
+    DUID               duid
+  } with {
+    variant "PRESENCE (code = cg_DHCPv6_OPTION_SERVERID)"
+    variant (len) "LENGTHTO (duid)"
+  }
+  
+  // rfc 3315 22.4
+  type record IA_NA_Option {
+    LIN2_BO_LAST       code (cg_DHCPv6_OPTION_IA_NA),
+    LIN2_BO_LAST       len,
+    OCT4               IAID,
+    LIN4_BO_LAST       t1,
+    LIN4_BO_LAST       t2,
+    IA_Address_Options ia_na_options
+  } with {
+    variant "PRESENCE (code = cg_DHCPv6_OPTION_IA_NA)"
+    variant (len) "LENGTHTO (IAID,t1,t2,ia_na_options)"
+  }
+  
+  // rfc 3315 22.5
+  type record IA_TA_Option {
+    LIN2_BO_LAST       code (cg_DHCPv6_OPTION_IA_TA),
+    LIN2_BO_LAST       len,
+    OCT4               IAID,
+    IA_Address_Options ia_ta_options
+  } with {
+    variant "PRESENCE (code = cg_DHCPv6_OPTION_IA_TA)"
+    variant (len) "LENGTHTO (IAID, ia_ta_options)"
+  }
+  
+  // rfc 3315 22.6
+  type record IA_Address_Option {
+    LIN2_BO_LAST       code (cg_DHCPv6_OPTION_IAADDR),
+    LIN2_BO_LAST       len,
+    IPv6_Address       ipv6_address,
+    LIN4_BO_LAST       preferred_lifetime,
+    LIN4_BO_LAST       valid_lifetime,
+    DHCPv6_Options     ia_addr_options
+  } with {
+    variant "PRESENCE (code = cg_DHCPv6_OPTION_IAADDR)"
+    variant (len) "LENGTHTO (ipv6_address, preferred_lifetime, valid_lifetime, ia_addr_options)"
+  }
+  
+  type set of IA_Address_Option IA_Address_Options;
+  
+  // rfc 3315 22.7
+  type record Option_Request_Option {
+    LIN2_BO_LAST            code(cg_DHCPv6_OPTION_ORO),
+    LIN2_BO_LAST            len,
+    Requested_Option_Codes  requested_option_codes
+  } with {
+    variant "PRESENCE (code = cg_DHCPv6_OPTION_ORO)"
+    variant (len) "LENGTHTO (requested_option_codes)"
+  }
+  
+  type record of OCT2 Requested_Option_Codes;
+  
+  // rfc 3315 22.8
+  type record Preference_Option {
+    LIN2_BO_LAST      code(cg_DHCPv6_OPTION_PREFERENCE),
+    LIN2_BO_LAST      len (1),
+    OCT1              pref_value
+    
+  } with {
+    variant "PRESENCE (code = cg_DHCPv6_OPTION_PREFERENCE)"
+    variant (len) "LENGTHTO (pref_value)"
+  }
+  
+  // rfc 3315 22.9
+  type record Elapsed_Time_Option {
+    LIN2_BO_LAST        code(cg_DHCPv6_OPTION_ELAPSED_TIME),
+    LIN2_BO_LAST        len (2),
+    LIN2_BO_LAST        elapsed_time
+    
+  } with {
+    variant "PRESENCE (code = cg_DHCPv6_OPTION_ELAPSED_TIME)"
+    variant (len) "LENGTHTO (elapsed_time)"
+  }
+  
+  // rfc 3315 22.10
+  type record Relay_Message_Option {
+    LIN2_BO_LAST         code(cg_DHCPv6_OPTION_RELAY_MSG),
+    LIN2_BO_LAST         len,
+    Relay_Message        dhcp_relay_message
+  } with {
+    variant "PRESENCE (code = cg_DHCPv6_OPTION_RELAY_MSG)"
+    variant (len) "LENGTHTO (dhcp_relay_message)"
+  }
+  
+  // rfc 3315 22.11
+  type record Authentication_Option {
+    LIN2_BO_LAST      code(cg_DHCPv6_OPTION_AUTH),
+    LIN2_BO_LAST      len,
+    OCT1              protocol,
+    OCT1              algorithm,
+    OCT1              rdm,
+    octetstring       replay_detection length(8),
+    octetstring       authentication_information             
+  } with {
+    variant "PRESENCE (code = cg_DHCPv6_OPTION_AUTH)"
+    variant (replay_detection) "FIELDLENGTH(8)"
+    variant (len) "LENGTHTO (protocol, algorithm, rdm, replay_detection, authentication_information)"
+  }
+  
+  // rfc 3315 22.12
+  type record Server_Unicast_Option {
+    LIN2_BO_LAST      code(cg_DHCPv6_OPTION_UNICAST),
+    LIN2_BO_LAST      len (16),
+    IPv6_Address      server_address
+  } with {
+    variant "PRESENCE (code = cg_DHCPv6_OPTION_UNICAST)"
+    variant (len) "LENGTHTO (server_address)"
+  }
+  
+  // rfc 3315 22.13
+  type record Status_Code_Option {
+    LIN2_BO_LAST      code(cg_DHCPv6_OPTION_STATUS_CODE),
+    LIN2_BO_LAST      len,
+    OCT2              status_code,
+    charstring        status_message
+  } with {
+    variant "PRESENCE (code = cg_DHCPv6_OPTION_STATUS_CODE)"
+    variant (len) "LENGTHTO (status_code, status_message)"
+  }
+  
+  // rfc 3315 22.14
+  type record Rapid_Commit_Option {
+    LIN2_BO_LAST      code(cg_DHCPv6_RAPID_COMMIT),
+    LIN2_BO_LAST      len (0)
+  } with {
+    variant "PRESENCE (code = cg_DHCPv6_RAPID_COMMIT)"
+  }
+  
+  // rfc 3315 22.15
+  type record User_Class_Option {
+    LIN2_BO_LAST      code(cg_DHCPv6_OPTION_USER_CLASS),
+    LIN2_BO_LAST      len,
+    User_Class_Data   user_class_data
+  } with {
+    variant "PRESENCE (code = cg_DHCPv6_OPTION_USER_CLASS)"
+    variant (len) "LENGTHTO (user_class_data)"
+  }
+  
+  type record User_Class {
+    LIN2_BO_LAST    user_class_len,
+    octetstring     opaque_data
+  } with {
+    variant (user_class_len) "LENGTHTO (opaque_data)"
+  }
+  
+  type set of User_Class User_Class_Data;
+  
+  // rfc 3315 22.16
+  type record Vendor_Class_Option {
+    LIN2_BO_LAST        code(cg_DHCPv6_OPTION_VENDOR_CLASS),
+    LIN2_BO_LAST        len,
+    OCT4                enterprise_number,
+    Vendor_Class_Data   vendor_class_data
+    
+  } with {
+    variant "PRESENCE (code = cg_DHCPv6_OPTION_VENDOR_CLASS)"
+    variant (len) "LENGTHTO (enterprise_number, vendor_class_data)"
+  }
+  
+  type record Vendor_Class {
+    LIN2_BO_LAST    vendor_class_len,
+    octetstring    opaque_data 
+  } with {
+    variant (vendor_class_len) "LENGTHTO (opaque_data)"
+  }
+ 
+  type set of Vendor_Class Vendor_Class_Data;
+  
+  // rfc 3315 22.17
+  type record Vendor_Specific_Information_Option {
+    LIN2_BO_LAST             code(cg_DHCPv6_OPTION_VENDOR_OPTS),
+    LIN2_BO_LAST             len,
+    OCT4                     enterprise_number,
+    Option_Data_Record       option_data
+    
+  } with {
+    variant "PRESENCE (code = cg_DHCPv6_OPTION_VENDOR_OPTS)"
+    variant (len) "LENGTHTO (enterprise_number, option_data)"
+  }
+  
+  type record Option_Data {
+    OCT2           opt_code,
+    LIN2_BO_LAST   option_len,
+    DHCPv6_Option  option_data
+  } with {
+    variant (option_len) "LENGTHTO (option_data)"
+  }
+  
+  type record of Option_Data Option_Data_Record;
+  
+  // rfc 3315 22.18
+  type record Interface_Id_Option {
+    LIN2_BO_LAST       code(cg_DHCPv6_OPTION_INTERFACE_ID),
+    LIN2_BO_LAST       len,
+    octetstring       interface_id
+  } with {
+    variant "PRESENCE (code = cg_DHCPv6_OPTION_INTERFACE_ID)"
+    variant (len) "LENGTHTO (interface_id)"
+  }
+  
+  // rfc 3315 22.19
+  type record Reconfigure_Message_Option {
+    LIN2_BO_LAST      code(cg_DHCPv6_OPTION_RECONF_MSG),
+    LIN2_BO_LAST      len (1),
+    INT1              msg_type
+  } with {
+    variant "PRESENCE (code = cg_DHCPv6_OPTION_RECONF_MSG)"
+    variant (len) "LENGTHTO (msg_type)"
+  }
+  
+  // rfc 3315 22.20
+  type record Reconfigure_Accept_Option {
+    LIN2_BO_LAST      code(cg_DHCPv6_OPTION_RECONF_ACCEPT),
+    LIN2_BO_LAST      len (0)
+  } with {
+    variant "PRESENCE (code = cg_DHCPv6_OPTION_RECONF_ACCEPT)"
+  }
+   
+  //rfc 3319 3
+  type union SIP_Server_DHCPv6_Option {
+    SIP_Server_Domain_Name_List     sip_server_domain_name_list,
+    SIP_Server_IPv6_Address_List    sip_server_ipv6_address_list
+  } with {
+    variant "TAG(
+      sip_server_domain_name_list, code = cg_DHCPv6_OPTION_SIP_SERVER_D;
+      sip_server_ipv6_address_list, code = cg_DHCPv6_OPTION_SIP_SERVER_A
+    )"
+  }
+    
+  //rfc 3319 3.1
+  type record SIP_Server_Domain_Name_List {
+    LIN2_BO_LAST       code (cg_DHCPv6_OPTION_SIP_SERVER_D),
+    LIN2_BO_LAST       len,
+    Search_List        SIP_server_domain_name_list
+  } with {
+    variant "PRESENCE (code = cg_DHCPv6_OPTION_SIP_SERVER_D)"
+    variant (len) "LENGTHTO (SIP_server_domain_name_list)"
+  }
+  
+  //rfc 3319 3.2
+  type record SIP_Server_IPv6_Address_List {
+    LIN2_BO_LAST       code (cg_DHCPv6_OPTION_SIP_SERVER_A),
+    LIN2_BO_LAST       len,
+    IPv6_Addresses     SIP_servers
+  } with {
+    variant "PRESENCE ( code = cg_DHCPv6_OPTION_SIP_SERVER_A)"
+    variant (len) "LENGTHTO(SIP_servers)"
+  }
+  
+  //rfc 3646 3.
+  type record DNS_Configuration_Option {
+    LIN2_BO_LAST       code (cg_DHCPv6_OPTION_DNS_SERVERS),
+    LIN2_BO_LAST       len,
+    IPv6_Addresses     DNS_recursive_name_servers
+  } with {
+    variant "PRESENCE (code = cg_DHCPv6_OPTION_DNS_SERVERS)"
+    variant (len) "LENGTHTO(DNS_recursive_name_servers)"
+  }
+  
+  type record of IPv6_Address IPv6_Addresses; 
+  
+  //rfc 3646 4.
+  type record Domain_Search_List_Option {
+    LIN2_BO_LAST        code (cg_DHCPv6_OPTION_DOMAIN_LIST),
+    LIN2_BO_LAST        len,
+    Search_List         searchlist
+  } with {
+    variant "PRESENCE (code = cg_DHCPv6_OPTION_DOMAIN_LIST)"
+    variant (len) "LENGTHTO(searchlist)"
+  }
+  
+  type record of Domain Search_List;
+  
+  type record Domain {
+    LIN1          len,
+    charstring    domain
+  } with {
+    variant (len) "LENGTHTO (domain)"
+  }
+  
+  // rfc 3633 9.
+  type record IA_PD_Option {
+    LIN2_BO_LAST             code (cg_DHCPv6_OPTION_IA_PD),
+    LIN2_BO_LAST             len,
+    OCT4                     IAID,
+    LIN4_BO_LAST             t1,
+    LIN4_BO_LAST             t2,
+    DHCPv6_Options           ia_pd_options
+  } with {
+    variant "PRESENCE (code = cg_DHCPv6_OPTION_IA_PD)"
+    variant (len) "LENGTHTO (IAID, t1, t2, ia_pd_options)"
+  }
+
+  // rfc 3633 10.  
+  type record IA_PD_Prefix_Option {
+    LIN2_BO_LAST              code (cg_DHCPv6_OPTION_IAPREFIX),
+    LIN2_BO_LAST              len,
+    LIN4_BO_LAST              preferred_lifetime,
+    LIN4_BO_LAST              valid_lifetime,
+    LIN1                      prefix_length,
+    OCT16                     prefix,
+    Requested_Option_Codes    iaprefix_options
+  } with {
+    variant "PRESENCE (code = cg_DHCPv6_OPTION_IAPREFIX)"
+    variant (len) "LENGTHTO(preferred_lifetime, valid_lifetime, prefix_length, prefix, iaprefix_options)"
+  }
+   
+  // rfc 3315 6.
+  type record Client_Server_Message {
+    OCT1                        msg_type,
+    OCT3                        transaction_id,
+    DHCPv6_Options              options
+  }
+
+  // rfc 3315 7.
+  type record Relay_Message {
+    OCT1                      msg_type,
+    LIN1                      hop_count,
+    IPv6_Address              link_address,
+    IPv6_Address              peer_address,
+    DHCPv6_Options            options //MUST include Relay_Message_Option 
+  }
+  
+  type union PDU_DHCPv6 {
+    Client_Server_Message      client_server_message,
+    Relay_Message              relay_message,
+    octetstring                backtrack
+  } with {
+    variant "TAG(
+      client_server_message,  msg_type  = cg_DHCPv6_SOLICIT_MESSAGE_TYPE; 
+      client_server_message,  msg_type  = cg_DHCPv6_ADVERTISE_MESSAGE_TYPE;       
+      client_server_message,  msg_type  = cg_DHCPv6_REQUEST_MESSAGE_TYPE;       
+      client_server_message,  msg_type  = cg_DHCPv6_CONFIRM_MESSAGE_TYPE;       
+      client_server_message,  msg_type  = cg_DHCPv6_RENEW_MESSAGE_TYPE;  
+      client_server_message,  msg_type  = cg_DHCPv6_REBIND_MESSAGE_TYPE;        
+      client_server_message,  msg_type  = cg_DHCPv6_REPLY_MESSAGE_TYPE;        
+      client_server_message,  msg_type  = cg_DHCPv6_RELEASE_MESSAGE_TYPE;        
+      client_server_message,  msg_type  = cg_DHCPv6_DECLINE_MESSAGE_TYPE; 
+      client_server_message,  msg_type  = cg_DHCPv6_RECONFIGURE_MESSAGE_TYPE;       
+      client_server_message,  msg_type  = cg_DHCPv6_INFORMATION_REQUEST_MESSAGE_TYPE;  
+      relay_message,          msg_type  = cg_DHCPv6_RELAY_FORW_MESSAGE_TYPE;
+      relay_message,          msg_type  = cg_DHCPv6_RELAY_REPL_MESSAGE_TYPE;  )"                 
+  }
+
+}//end of module
+with {
+extension "version R2A"
+encode "RAW"
+}
+
