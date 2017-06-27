@@ -249,12 +249,12 @@ module DHCPv6_Types{
   
   // rfc 3315 22.10
   type record Relay_Message_Option {
-    LIN2_BO_LAST         code(cg_DHCPv6_OPTION_RELAY_MSG),
-    LIN2_BO_LAST         len,
-    Relay_Message        dhcp_relay_message
+    LIN2_BO_LAST          code(cg_DHCPv6_OPTION_RELAY_MSG),
+    LIN2_BO_LAST          len,
+    Client_Server_Message dhcp_relayed_message
   } with {
     variant "PRESENCE (code = cg_DHCPv6_OPTION_RELAY_MSG)"
-    variant (len) "LENGTHTO (dhcp_relay_message)"
+    variant (len) "LENGTHTO (dhcp_relayed_message)"
   }
   
   // rfc 3315 22.11
@@ -377,7 +377,7 @@ module DHCPv6_Types{
   type record Reconfigure_Message_Option {
     LIN2_BO_LAST      code(cg_DHCPv6_OPTION_RECONF_MSG),
     LIN2_BO_LAST      len (1),
-    INT1              msg_type
+    OCT1              msg_type
   } with {
     variant "PRESENCE (code = cg_DHCPv6_OPTION_RECONF_MSG)"
     variant (len) "LENGTHTO (msg_type)"
