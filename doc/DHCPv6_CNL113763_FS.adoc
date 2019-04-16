@@ -1,49 +1,33 @@
----
-Author: Zoltán Medve
-Version: 155 17-CNL 113 763, Rev. A
-Date: 2013-05-10
-
----
 = DHCPv6 Protocol Modules for TTCN-3 Toolset with TITAN, Function Specification
 :author: Zoltán Medve
-:revnumber: 155 17-CNL 113 763, Rev. A
-:revdate: 2013-05-10
-:toc:
+:toc: left
 
-== How to Read This Document
-
-This is the Function Specification for the set of DHCPv6 protocol modules. DHCPv6 protocol modules are developed for the TTCN-3 Toolset with TITAN.
-
-== Scope
-
-The purpose of this document is to specify the content of the DHCPv6 protocol modules.
-
-= General
+== General
 
 Protocol modules implement the message structures of the related protocol in a formalized way, using the standard specification language TTCN-3. This allows defining of test data (templates) in the TTCN-3 language and correctly encoding/decoding messages when executing test suites using the TITAN TTCN-3 test environment.
 
 Protocol modules are using TITAN’s RAW encoding attributes <<_1, [1]>> and hence are usable with the TITAN test toolset only.
 
-= Functional Specification
+== Functional Specification
 
-== Protocol Version Implemented
+=== Protocol Version Implemented
 
 This protocol module contains the protocol messages and elements of the DHCPv6 protocol (see <<_3, [3]>>, <<_4, [4]>>, <<_5, [5]>>, <<_6, [6]>>, <<_7, [7]>>),
 
 [[modifications-deviations-related-to-the-protocol-specification]]
-== Modifications/Deviations Related to the Protocol Specification
+=== Modifications/Deviations Related to the Protocol Specification
 
-=== Implemented Messages
+==== Implemented Messages
 
 All message types listed in protocol descriptions are implemented.
 
 [[protocol-modifications-deviations]]
-=== Protocol Modifications/Deviations
+==== Protocol Modifications/Deviations
 
 None.
 
 [[encoding-decoding-and-other-related-functions]]
-== Encoding/Decoding and Other Related Functions
+=== Encoding/Decoding and Other Related Functions
 
 This product also contains encoding/decoding functions that provide for the correct encoding of messages when sent from TITAN and correct decoding of messages when received by TITAN. The encoder updates the `checksum` field with the correct value. Implemented encoding/decoding functions:
 
@@ -56,12 +40,12 @@ This product also contains encoding/decoding functions that provide for the corr
 |`ef_dec_PDU_DHCPv6_backtrack` |octetstring, PDU_DHCPv6 |integer
 |===
 
-= Terminology
+== Terminology
 
 *TITAN:* +
 TTCN-3 Test Executor.
 
-= Abbreviations
+== Abbreviations
 
 IETF:: Internet Engineering Task Force
 
@@ -73,7 +57,7 @@ RFC:: Request for Comments
 
 TTCN-3:: Testing and Test Control Notation version 3
 
-= References
+== References
 
 [[_1]]
 [1] Programmer’s Technical Reference for the TITAN TTCN-3 Test Executor

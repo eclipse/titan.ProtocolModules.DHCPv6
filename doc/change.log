@@ -1,0 +1,9 @@
+= DHCPv6 Protocol Modules for TTCN-3 Toolset with TITAN, Change log
+:author: Gábor Szalai
+:toc: left
+
+== Changes
+
+=== R3A
+
+The IA_NA, IA_TA, and Relay Message options were corrected.

@@ -181,7 +181,7 @@ module DHCPv6_Types{
     OCT4               IAID,
     LIN4_BO_LAST       t1,
     LIN4_BO_LAST       t2,
-    IA_Address_Options ia_na_options
+    DHCPv6_Options     ia_na_options
   } with {
     variant "PRESENCE (code = cg_DHCPv6_OPTION_IA_NA)"
     variant (len) "LENGTHTO (IAID,t1,t2,ia_na_options)"
@@ -192,7 +192,7 @@ module DHCPv6_Types{
     LIN2_BO_LAST       code (cg_DHCPv6_OPTION_IA_TA),
     LIN2_BO_LAST       len,
     OCT4               IAID,
-    IA_Address_Options ia_ta_options
+    DHCPv6_Options     ia_ta_options
   } with {
     variant "PRESENCE (code = cg_DHCPv6_OPTION_IA_TA)"
     variant (len) "LENGTHTO (IAID, ia_ta_options)"
@@ -519,7 +519,7 @@ module DHCPv6_Types{
 
 }//end of module
 with {
-extension "version R2A"
+extension "version R3A"
 encode "RAW"
 }
 
